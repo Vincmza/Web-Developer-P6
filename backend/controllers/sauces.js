@@ -9,7 +9,6 @@ exports.createSauce = (req, res, next) => {
     .then(()=>res.status(201).json({message:'Objet enregistré !'}))
     .catch(error=>res.status(400).json({error}))  
   }
-
   exports.modifySauce = (req, res, next) => {
     Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
       .then(() => res.status(200).json({ message: 'Objet modifié !'}))
