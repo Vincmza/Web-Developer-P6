@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 
 const saucesRoutes = require('./routes/sauces');
+const userRoutes = require('./routes/user');
 
 const mongoose = require('mongoose');
 
@@ -21,7 +22,8 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.use('/app/sauces', saucesRoutes);
+app.use('/api/sauces', saucesRoutes);
+app.use('/api/sauces/auth', userRoutes);
 
 module.exports = app;
 
