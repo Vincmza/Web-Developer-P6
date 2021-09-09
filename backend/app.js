@@ -3,10 +3,17 @@ const app = express();
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 const path = require('path');
+require('dotenv').config();
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://Vincent:arkhoninfaustus1987@cluster0.ifemo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+/*mongoose.connect('mongodb+srv://Vincent:arkhoninfaustus1987@cluster0.ifemo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));*/
+
+mongoose.connect(process.env.mongoUrl,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
