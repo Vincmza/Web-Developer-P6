@@ -5,8 +5,8 @@ const userRoutes = require('./routes/user');
 const path = require('path');
 const helmet = require("helmet");
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const rateLimit = require('express-rate-limit')
+const nocache = require("nocache");
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const mongoose = require('mongoose');
@@ -26,18 +26,17 @@ app.use((req, res, next) => {
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 mins
-  max: 1, // No of Requests
+  max: 50, // No of Requests
   });
   
 app.use(express.json());
 app.use(mongoSanitize());
-app.use(xss());
 app.use(helmet());
 app.use(limiter);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/sauces', saucesRoutes);
-app.use('/api/auth', userRoutes);
+app.use('/api/auth',nocache(), userRoutes);
 
 module.exports = app;
 

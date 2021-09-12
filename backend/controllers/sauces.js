@@ -1,5 +1,6 @@
 const Sauce = require('../models/sauce');
 const fs = require('fs');
+const xss = require('xss');
 
 exports.likeSauce = (req, res, next) => {
   const bodyInfos = req.body;
@@ -31,6 +32,8 @@ exports.likeSauce = (req, res, next) => {
 
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
+  for(let k in sauceObject) sauceObject[k] = xss(sauceObject[k]);
+    //console.log(sauceObject);
     delete sauceObject._id;
     const sauce = new Sauce({
       ...sauceObject,
@@ -40,12 +43,15 @@ exports.createSauce = (req, res, next) => {
     });
     sauce.save()
     .then(()=>res.status(201).json({message:'Objet enregistré !'}))
-    .catch(error=>res.status(400).json({error}))  
+    .catch(error=>{res.status(400).json({error})
+      console.log(error)})
   }
   
 exports.modifySauce = (req, res, next) => {
+  console.log(req.body);
   if(req.file){
-
+    const sauce = JSON.parse(req.body.sauce);
+    for(let k in sauce) sauce[k] = xss(sauce[k]);
     Sauce.findOne({_id: req.params.id})
     .then(sauce => {
       const filename = sauce.imageUrl.split('/images/')[1];
@@ -54,16 +60,19 @@ exports.modifySauce = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 
     sauceObject = {
-      ...JSON.parse(req.body.sauce),
+      ...sauce,
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     }     
   }
   else {
-    sauceObject = {...req.body}
+    const sauce = {...req.body}
+    for(let k in sauce) sauce[k] = xss(sauce[k]);
+    sauceObject = sauce;
   }
   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
     .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-    .catch(error => res.status(400).json({ error }));
+    .catch(error => {res.status(400).json({ error })
+      console.log(error)});
 }
 
 exports.deleteSauce = (req, res, next) => {
