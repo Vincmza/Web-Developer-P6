@@ -1,11 +1,13 @@
 const multer = require('multer');
 
+/*different files extension*/
 const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
     'image/png': 'png'
 };
 
+/*Store image of the sauce in images folder*/
 const storage = multer.diskStorage({
     destination: (req, file, callback)=>{
         callback(null, 'images')

@@ -16,6 +16,7 @@ schema
 .has().not().spaces()                           // Should not have spaces
 .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
 
+/*User create an account using an email and a password*/
 exports.signup = ('', (req, res, next)=>{
     if(schema.validate(req.body.password)){
         bcrypt.hash(req.body.password, 10)
@@ -34,6 +35,7 @@ exports.signup = ('', (req, res, next)=>{
     } 
 });
 
+/*User log in to the website with one's email and password*/
 exports.login = ('', (req, res, next)=>{
     User.findOne({email: req.body.email})
         .then(user => {
