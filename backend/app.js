@@ -19,7 +19,7 @@ mongoose
 
 /*Headers*/
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", process.env.clientUrl);
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 
 /*Declare package Rate Limit to avoid too many requests in a certain amount of time*/
 const limiter = rateLimit({
-    windowMs: 10 * 60 * 1000, // 10 mins
+    windowMs: 30 * 60, // 30 mins
     max: 50, // No of Requests
 });
 
